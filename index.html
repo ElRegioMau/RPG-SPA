@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Historias del la Luna — SPA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-elden">
+
+  <!-- Header / Música -->
+  <header class="spa-header">
+    <h1 class="title">Historias del la Luna</h1>
+    <nav class="btn-row">
+      <a class="btn" href="#/">Inicio</a>
+      <a class="btn" href="#/crear">Crear Personaje</a>
+      <a class="btn" href="#/visor">Visor</a>
+      <button id="btnPlay" class="btn">Música</button>
+      <button id="btnStop" class="btn">Detener</button>
+    </nav>
+  </header>
+
+  <!-- Vistas -->
+  <main id="root" class="container"></main>
+
+  <!-- Templates (opcionales) -->
+  <template id="tpl-home">
+    <section class="hero card">
+      <h2 class="subtitle">Bienvenido</h2>
+      <p class="muted">Crea tu personaje, elige clase, reparte puntos y equipa un objeto.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#/crear">Empezar</a>
+        <a class="btn" href="#/visor">Ver Hoja</a>
+      </div>
+    </section>
+    <section class="card">
+      <h3 class="panel-title">Guía rápida</h3>
+      <ol class="muted">
+        <li>Elige una Clase (bonificadores + habilidad).</li>
+        <li>Reparte 10 puntos (máx 5 por stat).</li>
+        <li>Elige un Objeto inicial.</li>
+        <li>Guarda y revisa en el Visor.</li>
+      </ol>
+    </section>
+  </template>
+
+  <template id="tpl-creator">
+    <section class="card">
+      <header class="subhero">
+        <h2 class="subtitle">Crea tu personaje</h2>
+      </header>
+
+      <form id="characterForm" class="creator-form">
+        <!-- Nombre -->
+        <div class="field">
+          <label class="golden">Nombra tu personaje</label>
+          <input id="nombre" name="nombre" type="text" placeholder="Ej. Xólotl" required maxlength="24" />
+        </div>
+
+        <!-- Accordion: Clase -->
+        <section class="accordion">
+          <button type="button" class="accordion-toggle" data-acc="clases">
+            <span class="golden">Clases</span><span class="acc-icon">▼</span>
+          </button>
+          <div class="accordion-panel" id="acc-clases">
+            <div id="clases" class="grid grid-2"></div>
+            <div id="claseDescripcion" class="muted mt-8"></div>
+          </div>
+        </section>
+
+        <!-- Accordion: Reparto de puntos -->
+        <section class="accordion">
+          <button type="button" class="accordion-toggle" data-acc="stats">
+            <span class="golden">Repartir Puntos</span><span class="acc-icon">▼</span>
+          </button>
+          <div class="accordion-panel" id="acc-stats">
+            <p class="muted">
+              Tienes <strong id="puntosRestantes">10</strong> puntos. Máximo 5 por estadística. Los bonificadores de clase se aplican aparte.
+            </p>
+            <div class="stats-grid"></div>
+          </div>
+        </section>
+
+        <!-- Accordion: Objetos -->
+        <section class="accordion">
+          <button type="button" class="accordion-toggle" data-acc="items">
+            <span class="golden">Objetos</span><span class="acc-icon">▼</span>
+          </button>
+          <div class="accordion-panel" id="acc-items">
+            <div id="items" class="grid grid-2"></div>
+            <p id="itemDescripcion" class="muted mt-8"></p>
+          </div>
+        </section>
+
+        <!-- Botones -->
+        <div class="btn-row mt-16">
+          <button type="button" class="btn" id="btnReset">Reiniciar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </section>
+  </template>
+
+  <template id="tpl-visor">
+    <section class="card">
+      <h2 class="subtitle">Hoja de Personaje</h2>
+      <div id="personajeDatos" class="sheet"></div>
+      <div class="btn-row mt-16">
+        <a class="btn" href="#/crear">Editar</a>
+        <a class="btn" href="#/">Inicio</a>
+      </div>
+    </section>
+  </template>
+
+  <!-- JS -->
+  <script type="module" src="js/data.js"></script>
+  <script type="module" src="js/creator.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

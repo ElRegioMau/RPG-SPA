@@ -1,5 +1,5 @@
 // Router básico + control de música + montaje de vistas
-import { mountCreator } from './creator.js';
+import { mountCreator } from './creator_firebase.js';
 
 // Música (simple: inicia al presionar botón; en SPA no se corta)
 let ost;

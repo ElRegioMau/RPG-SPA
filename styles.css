@@ -58,3 +58,47 @@ input[type="radio"]{display:none}
 .spa-header{position:sticky;top:0;background:linear-gradient(180deg,#0f0f0f,#0f0f0fcc);backdrop-filter:saturate(1.1) blur(6px);z-index:10;border-bottom:1px solid rgba(212,175,55,.25);padding:8px 12px}
 
 input[type="text"]{width:100%;background:#111;color:var(--text);border:1px solid var(--gold);border-radius:8px;padding:10px}
+
+/* Contenedor principal para las tarjetas */
+#personajeDatos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+/* Tarjeta de personaje */
+.tarjeta-personaje {
+  background-color: #1e1e2f;
+  color: #f0f0f0;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efecto al pasar el mouse */
+.tarjeta-personaje:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Estilos para títulos */
+.tarjeta-personaje h2 {
+  margin: 0 0 10px;
+  color: #ffcc00;
+  font-size: 1.4rem;
+}
+
+/* Separadores */
+.tarjeta-personaje hr {
+  border: 0;
+  height: 1px;
+  background: #444;
+  margin: 10px 0;
+}
+
+/* Texto destacado */
+.tarjeta-personaje strong {
+  color: #ffcc00;
+}

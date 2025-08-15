@@ -1,4 +1,5 @@
 // Router básico + control de música + montaje de vistas
+import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { mountCreator } from './creator_firebase.js';
 
 // Música (simple: inicia al presionar botón; en SPA no se corta)
@@ -24,36 +25,55 @@ function mountHome() {
   root.appendChild(tpl.content.cloneNode(true));
 }
 
+// Monta el visor de personajes
+
 function mountVisor() {
   const tpl = document.getElementById('tpl-visor');
+  const root = document.getElementById('root');
   root.innerHTML = '';
   root.appendChild(tpl.content.cloneNode(true));
 
   const cont = document.getElementById('personajeDatos');
-  try {
-    const raw = localStorage.getItem('hl_personaje');
-    if (!raw) {
-      cont.innerHTML = '<p class="muted">No hay personaje guardado. Ve a “Crear Personaje”.</p>';
-      return;
-    }
-    const pj = JSON.parse(raw);
-    cont.innerHTML = `
-      <div class="sheet-row"><span>Nombre</span><strong>${pj.nombre}</strong></div>
-      <div class="sheet-row"><span>Clase</span><strong>${pj.clase}</strong></div>
-      <div class="sheet-row"><span>Descripción</span><em>${pj.claseDescripcion}</em></div>
-      <hr/>
-      <div class="sheet-row"><span>Vida</span><strong>${pj.stats.vida}</strong></div>
-      <div class="sheet-row"><span>Destreza</span><strong>${pj.stats.destreza}</strong></div>
-      <div class="sheet-row"><span>Sabiduría</span><strong>${pj.stats.sabiduria}</strong></div>
-      <div class="sheet-row"><span>Daño</span><strong>${pj.stats.dano}</strong></div>
-      <div class="sheet-row"><span>Carisma</span><strong>${pj.stats.carisma}</strong></div>
-      <hr/>
-      <div class="sheet-row"><span>Ítem</span><strong>${pj.item}</strong></div>
-      <div class="sheet-row"><span>Efecto</span><em>${pj.itemDescripcion}</em></div>
-    `;
-  } catch (e) {
-    cont.innerHTML = '<p class="muted">Error al leer los datos.</p>';
-  }
+  cont.innerHTML = '<p class="muted">Cargando personajes...</p>';
+
+  const db = getDatabase();
+  const dbRef = ref(db);
+
+  get(child(dbRef, 'personajes'))
+    .then(snapshot => {
+      if (!snapshot.exists()) {
+        cont.innerHTML = '<p class="muted">No hay personajes guardados en Firebase.</p>';
+        return;
+      }
+
+      const data = snapshot.val();
+      cont.innerHTML = ''; // Limpia contenedor
+
+      // Recorremos cada personaje
+      Object.values(data).forEach(pj => {
+        const card = document.createElement('div');
+        card.className = 'tarjeta-personaje';
+        card.innerHTML = `
+          <h2>${pj.nombre}</h2>
+          <p><strong>Clase:</strong> ${pj.clase}</p>
+          <p><em>${pj.claseDescripcion}</em></p>
+          <hr/>
+          <p><strong>Vida:</strong> ${pj.stats.vida}</p>
+          <p><strong>Destreza:</strong> ${pj.stats.destreza}</p>
+          <p><strong>Sabiduría:</strong> ${pj.stats.sabiduria}</p>
+          <p><strong>Daño:</strong> ${pj.stats.dano}</p>
+          <p><strong>Carisma:</strong> ${pj.stats.carisma}</p>
+          <hr/>
+          <p><strong>Ítem:</strong> ${pj.item}</p>
+          <p><em>${pj.itemDescripcion}</em></p>
+        `;
+        cont.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error('Error al leer personajes:', error);
+      cont.innerHTML = '<p class="muted">Error al cargar personajes desde Firebase.</p>';
+    });
 }
 
 const routes = {

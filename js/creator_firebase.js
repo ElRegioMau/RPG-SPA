@@ -158,6 +158,7 @@ export function mountCreator(root) {
   // --- Submit ---
   form?.addEventListener('submit', async (e)=>{
     e.preventDefault();
+    console.log("🔹 Submit disparado");  // Verifica que el evento se ejecuta
     const nombre = document.getElementById('nombre').value.trim();
     if(!nombre) return alert('Ponle un nombre a tu personaje.');
     const stats={};

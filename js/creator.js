@@ -224,7 +224,7 @@ export function mountCreator(root) {
     };
 
     // Guardar en localStorage (más tarde: Firebase)
-    try { localStorage.setItem('hl_personaje', JSON.stringify(personaje)); }
+    try { localStorage.setItem('hl_personaje', JSON.stringify(personaje)); console.log("🔹 Clase seleccionada:", claseActual, "🔹 Objeto seleccionado:", itemActual), puntosRestantes.textContent = String(puntos); }
     catch (err) { console.error('No se pudo guardar', err); }
 
     // Ir al visor

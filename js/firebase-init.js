@@ -20,5 +20,5 @@ const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 
 // Exporta para usar en otros archivos
-const db = getDatabase(app);
-export { app, db };
+const fireStoreDB = getFirestore(app);
+export { app, fireStoreDB };

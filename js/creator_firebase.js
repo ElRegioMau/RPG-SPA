@@ -1,6 +1,6 @@
 // creator_firebase.js
 import { CLASES, ITEMS, STAT_KEYS } from './data.js';
-import { db } from './firebase-init.js';
+import { fireStoreDB } from './firebase-init.js';
 import { collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 export function mountCreator(root) {
@@ -195,7 +195,7 @@ export function mountCreator(root) {
     };
 
     try {
-      await addDoc(collection(db,"personajes"),personaje);
+      await addDoc(collection(fireStoreDB,"personajes"),personaje);
       console.log("✅ Personaje guardado en Firestore:", personaje);
       alert("Personaje creado y guardado con éxito.");
       form.reset();

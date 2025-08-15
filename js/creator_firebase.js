@@ -31,10 +31,11 @@ classCards.forEach(card => {
         classCards.forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
         selectedClass = card.dataset.class;
+        console.log("🔹 Clase seleccionada:", selectedClass);
     });
 });
 
-console.log("🔹 Clase seleccionada:", selectedClass);
+
 
 // ===============================
 // EVENTOS: SELECCIÓN DE OBJETOS
@@ -49,11 +50,12 @@ objectCards.forEach(card => {
             selectedObjects.push(objectName);
             card.classList.add('selected');
         }
+        console.log("🔹 Objetos seleccionados:", selectedObjects)
+;
     });
 });
 
-console.log("🔹 Objetos seleccionados:", selectedObjects)
-;
+
 
 // ===============================
 // MANEJO DE PUNTOS
@@ -72,10 +74,12 @@ document.querySelectorAll('.stat-btn').forEach(btn => {
             availablePoints++;
         }
 
+
         pointsDisplay.textContent = availablePoints;
+        console.log("🔹 Puntos disponibles:", availablePoints);
     });
 });
-console.log("🔹 Puntos disponibles:", availablePoints);
+
 
 // ===============================
 // SUBMIT DEL FORMULARIO

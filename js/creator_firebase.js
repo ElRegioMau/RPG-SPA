@@ -10,6 +10,7 @@ export function mountCreator(root) {
   const tpl = document.getElementById('tpl-creator');
   root.innerHTML = '';
   root.appendChild(tpl.content.cloneNode(true));
+  console.log("🔹 Template inyectado");
 
   // --- Estado ---
   let puntos = 10;
@@ -18,14 +19,16 @@ export function mountCreator(root) {
   let itemActual = 'Poción de vida';
 
   // --- Refs ---
-  const clasesCont = document.getElementById('clases');
-  const claseDesc = document.getElementById('claseDescripcion');
+  const clasesCont = root.querySelector('#clases');
+  const claseDesc = root.querySelector('#claseDescripcion');
   const statsGrid = root.querySelector('.stats-grid');
-  const puntosRestantes = document.getElementById('puntosRestantes');
-  const itemsCont = document.getElementById('items');
-  const itemDesc = document.getElementById('itemDescripcion');
-  const form = document.getElementById('characterForm');
-  const btnReset = document.getElementById('btnReset');
+  const puntosRestantes = root.querySelector('#puntosRestantes');
+  const itemsCont = root.querySelector('#items');
+  const itemDesc = root.querySelector('#itemDescripcion');
+  const form = root.querySelector('#characterForm');
+  const btnReset = root.querySelector('#btnReset');
+
+  console.log("🔹 Refs cargadas:", { form, clasesCont, statsGrid, itemsCont });
 
   // --- Accordion ---
   root.querySelectorAll('.accordion-toggle').forEach(btn => {
@@ -44,12 +47,14 @@ export function mountCreator(root) {
       const id = `clase-${idx}`;
       const wrap = document.createElement('div');
       wrap.className = 'option-wrap';
+
       const radio = document.createElement('input');
       radio.type = 'radio';
       radio.name = 'clase';
       radio.id = id;
       radio.value = nombre;
       radio.checked = (nombre === claseActual);
+
       const label = document.createElement('label');
       label.setAttribute('for', id);
       label.className = 'option';
@@ -58,6 +63,7 @@ export function mountCreator(root) {
         <span class="opt-sub">${CLASES[nombre].descripcion}</span>
         <span class="opt-skill">Habilidad: ${CLASES[nombre].habilidad}</span>
       `;
+
       wrap.appendChild(radio);
       wrap.appendChild(label);
       if (radio.checked) wrap.classList.add('selected');
@@ -92,18 +98,24 @@ export function mountCreator(root) {
     STAT_KEYS.forEach(k => {
       const row = document.createElement('div');
       row.className = 'stat-row';
+
       const base = CLASES[claseActual].bonificadores[k];
+
       const label = document.createElement('div');
       label.className = 'stat-label';
       label.innerHTML = `<span class="stat-name">${k[0].toUpperCase()+k.slice(1)}</span> <span class="stat-base">Base de clase: ${base}</span>`;
+
       const minus = document.createElement('button');
       minus.type = 'button'; minus.className = 'btn stat-btn'; minus.textContent = '−';
       minus.addEventListener('click', () => modifyStat(k, -1));
+
       const plus = document.createElement('button');
       plus.type = 'button'; plus.className = 'btn stat-btn'; plus.textContent = '+';
       plus.addEventListener('click', () => modifyStat(k, +1));
+
       const value = document.createElement('div');
       value.className = 'stat-value'; value.id = `val-${k}`; value.textContent = base + asignados[k];
+
       row.appendChild(label); row.appendChild(minus); row.appendChild(value); row.appendChild(plus);
       statsGrid.appendChild(row);
     });
@@ -111,8 +123,8 @@ export function mountCreator(root) {
   }
 
   function modifyStat(k, delta) {
-    if (delta > 0 && puntos > 0 && asignados[k]<5) { asignados[k]+=1; puntos-=1; }
-    else if (delta < 0 && asignados[k]>0) { asignados[k]-=1; puntos+=1; }
+    if(delta > 0 && puntos > 0 && asignados[k]<5) { asignados[k]+=1; puntos-=1; }
+    else if(delta < 0 && asignados[k]>0) { asignados[k]-=1; puntos+=1; }
     updateValues();
     console.log("🔹 Puntos disponibles:", puntos);
   }
@@ -131,9 +143,14 @@ export function mountCreator(root) {
     Object.keys(ITEMS).forEach((nombre, idx) => {
       const id = `item-${idx}`;
       const wrap = document.createElement('div'); wrap.className='option-wrap';
-      const radio = document.createElement('input'); radio.type='radio'; radio.name='item'; radio.id=id; radio.value=nombre; radio.checked=(nombre===itemActual);
-      const label = document.createElement('label'); label.setAttribute('for',id); label.className='option';
+
+      const radio = document.createElement('input');
+      radio.type='radio'; radio.name='item'; radio.id=id; radio.value=nombre; radio.checked=(nombre===itemActual);
+
+      const label = document.createElement('label');
+      label.setAttribute('for',id); label.className='option';
       label.innerHTML=`<span class="opt-title">${nombre}</span><span class="opt-sub">${ITEMS[nombre]}</span>`;
+
       wrap.appendChild(radio); wrap.appendChild(label);
       if(radio.checked) wrap.classList.add('selected');
       itemsCont.appendChild(wrap);
@@ -158,30 +175,36 @@ export function mountCreator(root) {
   // --- Submit ---
   form?.addEventListener('submit', async (e)=>{
     e.preventDefault();
-    console.log("🔹 Submit disparado");  // Verifica que el evento se ejecuta
-    const nombre = document.getElementById('nombre').value.trim();
+    console.log("🔹 Submit disparado");
+
+    const nombre = root.querySelector('#nombre').value.trim();
     if(!nombre) return alert('Ponle un nombre a tu personaje.');
-    const stats={};
+
+    const stats = {};
     STAT_KEYS.forEach(k=>stats[k]=CLASES[claseActual].bonificadores[k]+asignados[k]);
+
     const personaje = {
       nombre,
       clase: claseActual,
       claseDescripcion: CLASES[claseActual].descripcion,
       habilidad: CLASES[claseActual].habilidad,
       stats,
-      item:itemActual,
+      item: itemActual,
       itemDescripcion: ITEMS[itemActual],
       createdAt: new Date()
     };
-    // Guardar en Firebase
+
     try {
       await addDoc(collection(db,"personajes"),personaje);
       console.log("✅ Personaje guardado en Firestore:", personaje);
       alert("Personaje creado y guardado con éxito.");
-      form.reset(); puntos=10; claseActual='Humano'; itemActual='Poción de vida';
+      form.reset();
+      puntos=10; claseActual='Humano'; itemActual='Poción de vida';
       Object.keys(asignados).forEach(k=>asignados[k]=0);
       renderClases(); renderStats(); renderItems();
-    } catch(err){ console.error("❌ Error guardando en Firestore:", err);}
+    } catch(err){
+      console.error("❌ Error guardando en Firestore:", err);
+    }
   });
 
   // --- Inicializar ---

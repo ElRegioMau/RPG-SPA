@@ -1,14 +1,16 @@
-// Router básico + control de música + montaje de vistas
-import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+// app.js
+import { ref, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { db } from './firebase-init.js';
 import { mountCreator } from './creator_firebase.js';
 
-// Música (simple: inicia al presionar botón; en SPA no se corta)
+// Música
 let ost;
 const btnPlay = document.getElementById('btnPlay');
 const btnStop = document.getElementById('btnStop');
+
 btnPlay?.addEventListener('click', () => {
   if (!ost) {
-    ost = new Audio('ost.mp3'); // coloca tu ruta real
+    ost = new Audio('ost.mp3');
     ost.loop = true;
     ost.volume = 0.5;
   }
@@ -25,18 +27,14 @@ function mountHome() {
   root.appendChild(tpl.content.cloneNode(true));
 }
 
-// Monta el visor de personajes
-
 function mountVisor() {
   const tpl = document.getElementById('tpl-visor');
-  const root = document.getElementById('root');
   root.innerHTML = '';
   root.appendChild(tpl.content.cloneNode(true));
 
   const cont = document.getElementById('personajeDatos');
   cont.innerHTML = '<p class="muted">Cargando personajes...</p>';
 
-  const db = getDatabase();
   const dbRef = ref(db);
 
   get(child(dbRef, 'personajes'))
@@ -47,9 +45,8 @@ function mountVisor() {
       }
 
       const data = snapshot.val();
-      cont.innerHTML = ''; // Limpia contenedor
+      cont.innerHTML = '';
 
-      // Recorremos cada personaje
       Object.values(data).forEach(pj => {
         const card = document.createElement('div');
         card.className = 'tarjeta-personaje';

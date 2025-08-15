@@ -28,6 +28,8 @@ classCards.forEach(card => {
     });
 });
 
+console.log("🔹 Clase seleccionada:", selectedClass);
+
 // ===============================
 // EVENTOS: SELECCIÓN DE OBJETOS
 // ===============================
@@ -43,6 +45,9 @@ objectCards.forEach(card => {
         }
     });
 });
+
+console.log("🔹 Objetos seleccionados:", selectedObjects)
+;
 
 // ===============================
 // MANEJO DE PUNTOS
@@ -64,6 +69,7 @@ document.querySelectorAll('.stat-btn').forEach(btn => {
         pointsDisplay.textContent = availablePoints;
     });
 });
+console.log("🔹 Puntos disponibles:", availablePoints);
 
 // ===============================
 // SUBMIT DEL FORMULARIO

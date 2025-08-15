@@ -1,6 +1,6 @@
 // app.js
 import { ref, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { db } from './firebase-init.js';
+import { fireStoreDB } from './firebase-init.js';
 import { mountCreator } from './creator_firebase.js';
 
 // Música
@@ -35,7 +35,7 @@ function mountVisor() {
   const cont = document.getElementById('personajeDatos');
   cont.innerHTML = '<p class="muted">Cargando personajes...</p>';
 
-  const dbRef = ref(db);
+  const dbRef = ref(fireStoreDB);
 
   get(child(dbRef, 'personajes'))
     .then(snapshot => {

@@ -1,4 +1,22 @@
 console.log("🔹 Script cargado correctamente");
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const classCards = document.querySelectorAll('.class-card');
+    const objectCards = document.querySelectorAll('.object-card');
+    const pointsDisplay = document.getElementById('points-display');
+    const form = document.getElementById('character-form');
+
+    let selectedClass = null;
+    let selectedObjects = [];
+    let availablePoints = 10;
+
+    console.log("🔹 DOM cargado, elementos listos:", classCards.length, objectCards.length, pointsDisplay, form);
+
+    // ... aquí todo tu código de eventos y submit
+
+});
+
 // ===============================
 // IMPORTS
 // ===============================
